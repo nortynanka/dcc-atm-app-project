@@ -34,14 +34,20 @@ function validatePin(enteredPin) {
   //Return value should be a Boolean (true or false)
   //In English: if the PIN entered is correct, return True. Otherwise, return False.
   if (enteredPin === pin) {
-    let userInput = prompt("PIN successfully validated. What would you like to do?\n(balance, withdrawal, deposit, start over, quit)")
-  //TODO: Run main menu switch/case.
+    let userInput = alert("PIN successfully validated. Press OK to continue.")
+    return true;
   }
   else {
     alert("An invalid PIN has been entered. Please try again.");
-  //TODO: Restart app.
+    accessATM();
+    return false;
   }
 }
 
 //TODO: Export these functions
-module.export {getBalance, withdraw, deposit, validatePin};
+module.export = {
+  getBalance, 
+  withdraw, 
+  deposit, 
+  validatePin
+};
