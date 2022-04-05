@@ -1,46 +1,49 @@
 "use strict";
-//! Don't forget to add "console": "integratedTerminal" to .vscode/launch.json after creating launch configuration
-//TODO: Import necessary functions from atm.js
+const prompt = require("prompt-sync")();
 const {getBalance, withdraw, deposit, validatePin} = require("./atm");
 
-function accessATM() {
-  //Use ATM.js validatePin function to verify pin matches
-  //Proceed to main menu ONLY if they match
-  let enteredPin = prompt("Please enter your 4-digit personal identification number:\n0000");
-  validatePin(enteredPin);
-}
-
-//TODO: Call accessATM function
-
+accessATM();
 
 function mainMenu() {
-  //TODO: Set up a main menu.  Prompt users for ATM selection to do the following:
-  //TODO: Figure out how to jump from main menu to the functions pertaining to each case.
-  //TODO: Write a default statement and figure out what should happen when restart/quit are executed and HOW to restart/quit the app.
-  //! Remember - we should keep prompting the user for options until they quit!
-  switch(userInput = prompt("Welcome authenticated user. How would you like to proceed?\n(balance, deposit, withdrawal, restart, quit)")) {
-  case 0:
-  //Get current balance
-  userInput = "balance";
-  break;
-  case 1:
-  //Make a deposit
-  userInput = "deposit";
-  break;
-  case 2:
-  //Make a withdrawal
-  userInput = "withdrawal";
-  break;
-  case 3:
-  //Restart
-  userInput = "restart";
-  break;
-  case 4:
-  //Quit
-  userInput = "quit";
-  break;
-  default:
+  const userInput = prompt("How would you like to proceed? (balance, deposit, withdrawal, restart, quit)");
+      if (userInput === "balance") {
+          getBalance();
+          return mainMenu();
+      }
+      if (userInput === "deposit") {
+          const userAmount = prompt("Please enter the amount you would like to deposit in increments of 20 without a dollar sign:");
+          deposit(userAmount);
+          return mainMenu();
+      }
+      if (userInput === "withdrawal") {
+          const userAmount = prompt("Please enter the amount you would like to withdraw in increments of 20 without a dollar sign:");
+          withdraw(userAmount);
+          return mainMenu();
+      }
+      if (userInput === "restart") {
+          console.log("Starting over...");
+          return accessATM();
+      }
+      if (userInput === "quit") {
+          console.log("Goodbye.");
+          return false;
+      }
+    else {
+          console.log("That is not a valid option. Please try again.");
+          return accessATM();
   }
 }
 
-//TODO: Call mainMenu function to start our app!
+function accessATM() {
+  const fourDigitNumber = prompt("Please enter your 4-digit personal identification number:");
+  let pinResult = validatePin(fourDigitNumber); {
+    if (pinResult === true) {
+      console.log("PIN validated successfully. Now directing you to the main menu...");
+      mainMenu();
+    }
+    else if (pinResult === false) {
+      console.log("Inavlid PIN. Please try again.")
+      accessATM();
+    }
+  }
+}
